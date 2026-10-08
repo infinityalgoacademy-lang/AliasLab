@@ -18,7 +18,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
         <button
           onClick={() => onToolChange("alias")}
-          className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
+          className="flex cursor-pointer items-center gap-2.5 transition-opacity hover:opacity-80"
           aria-label="AliasLab الرئيسية"
         >
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">
@@ -37,7 +37,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
             <button
               key={tool.id}
               onClick={() => onToolChange(tool.id)}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 activeTool === tool.id
                   ? "bg-foreground text-background"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -85,7 +85,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
             <button
               key={tool.id}
               onClick={() => onToolChange(tool.id)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 activeTool === tool.id
                   ? "bg-foreground text-background"
                   : "text-muted-foreground hover:bg-accent"

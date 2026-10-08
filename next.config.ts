@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  allowedDevOrigins: [
+    "aliaslab.orca.localhost",
+    "*.orca.localhost",
+  ],
 };
 
 export default nextConfig;

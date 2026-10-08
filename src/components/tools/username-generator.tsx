@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { generateUsername, type UsernameOptions } from "@/lib/tools";
 
 const DEFAULTS: UsernameOptions = {
@@ -137,16 +137,16 @@ export function UsernameGenerator() {
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <Label className="text-xs">أحرف كبيرة أولى</Label>
-              <Switch
+              <Checkbox
                 checked={opts.capitalize}
-                onCheckedChange={(v) => toggle("capitalize")(v)}
+                onCheckedChange={(v) => toggle("capitalize")(v === true)}
               />
             </div>
             <div className="flex items-center justify-between">
               <Label className="text-xs">إضافة أرقام</Label>
-              <Switch
+              <Checkbox
                 checked={opts.numbers}
-                onCheckedChange={(v) => toggle("numbers")(v)}
+                onCheckedChange={(v) => toggle("numbers")(v === true)}
               />
             </div>
           </div>

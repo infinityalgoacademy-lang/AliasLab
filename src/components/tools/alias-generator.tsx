@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -255,19 +255,19 @@ export function AliasGenerator() {
           )}
 
           {mode === "both" && (
-            <div className="flex items-center justify-between rounded-lg border border-border p-3">
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
               <div className="space-y-0.5">
                 <Label htmlFor="dots-plus" className="text-xs font-bold">
                   إضافة نقاط للألقاب ذات +
                 </Label>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-[11px] leading-relaxed text-muted-foreground">
                   يزيد من التشويش ويصعّب التتبّع
                 </p>
               </div>
-              <Switch
+              <Checkbox
                 id="dots-plus"
                 checked={applyDotsToPlus}
-                onCheckedChange={setApplyDotsToPlus}
+                onCheckedChange={(v) => setApplyDotsToPlus(v === true)}
               />
             </div>
           )}
@@ -284,7 +284,7 @@ export function AliasGenerator() {
               value={[count]}
               onValueChange={(v) => setCount(v[0])}
               min={1}
-              max={500}
+              max={5000}
               step={1}
             />
             <div className="flex items-center gap-2">

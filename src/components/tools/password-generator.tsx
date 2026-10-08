@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import {
   generatePassword,
@@ -65,10 +65,10 @@ export function PasswordGenerator() {
             <Label className="text-sm font-bold">كلمة المرور المولّدة</Label>
             <div className="relative">
               <Input
-                dir="ltr"
+                dir="rtl"
                 readOnly
                 value={password}
-                className="h-14 bg-muted/40 pr-12 font-mono text-lg tracking-wide"
+                className="h-14 bg-muted/40 pe-12 font-mono text-lg tracking-wide"
               />
               <button
                 onClick={handleCopy}
@@ -228,7 +228,7 @@ function ToggleRow({
   return (
     <div className="flex items-center justify-between">
       <Label className="text-xs">{label}</Label>
-      <Switch checked={checked} onCheckedChange={onChange} />
+      <Checkbox checked={checked} onCheckedChange={(v) => onChange(v === true)} />
     </div>
   );
 }

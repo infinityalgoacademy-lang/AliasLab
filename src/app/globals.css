@@ -118,6 +118,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  [role="switch"],
+  [role="radio"],
+  [role="tab"],
+  [role="option"],
+  select:not(:disabled),
+  summary,
+  label:has(input[type="checkbox"]),
+  label:has(input[type="radio"]),
+  label:has([role="radio"]),
+  label:has([role="switch"]) {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"]:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
   html {
     scroll-behavior: smooth;
   }
