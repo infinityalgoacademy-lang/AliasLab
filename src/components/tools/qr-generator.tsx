@@ -9,11 +9,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { generateQrDataUrl, generateQrSvg } from "@/lib/qr";
+import { toast } from "sonner";
 
 const PRESETS = [
   { label: "mailto", value: "mailto:ahmed@gmail.com" },
   { label: "اسم واي فاي", value: "WIFI:T:WPA;S:MyNetwork;P:password;;" },
-  { label: "رابط", value: "https://aliaslab.dev" },
+  {
+    label: "المستودع",
+    value: "https://github.com/infinityalgoacademy-lang/AliasLab",
+  },
   { label: "هاتف", value: "tel:+1234567890" },
 ];
 
@@ -23,12 +27,14 @@ export function QrGenerator() {
   const [dataUrl, setDataUrl] = useState<string>("");
   const [svgStr, setSvgStr] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setLoading(true);
+      setError("");
       const trimmed = text.trim();
       try {
         const [url, svg] = trimmed
@@ -40,6 +46,11 @@ export function QrGenerator() {
         if (cancelled) return;
         setDataUrl(url);
         setSvgStr(svg);
+      } catch {
+        if (cancelled) return;
+        setDataUrl("");
+        setSvgStr("");
+        setError("تعذّر إنشاء رمز QR لهذا المحتوى. جرّب نصاً أقصر.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -69,17 +80,26 @@ export function QrGenerator() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  const copyDataUrl = async () => {
+  const copyImage = async () => {
     if (!dataUrl) return;
+    if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
+      toast.error("نسخ الصور غير مدعوم في هذا المتصفح؛ يمكنك تحميل PNG بدلاً من ذلك.");
+      return;
+    }
+
     try {
-      await navigator.clipboard.writeText(dataUrl);
+      const imageBlob = await fetch(dataUrl).then((response) => response.blob());
+      await navigator.clipboard.write([
+        new ClipboardItem({ [imageBlob.type]: imageBlob }),
+      ]);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      toast.success("تم نسخ صورة رمز QR.");
+      window.setTimeout(() => setCopied(false), 1500);
     } catch {
-      /* ignore */
+      toast.error("تعذر نسخ صورة رمز QR؛ يمكنك تحميلها بصيغة PNG.");
     }
   };
 
@@ -97,14 +117,16 @@ export function QrGenerator() {
             {dataUrl ? (
               <img
                 src={dataUrl}
-                alt="QR Code"
+                alt="رمز QR للمحتوى المدخل"
                 className="h-full w-full object-contain"
               />
             ) : (
               !loading && (
                 <div className="flex flex-col items-center gap-2 text-muted-foreground">
                   <QrCode className="h-10 w-10" />
-                  <span className="text-xs">أدخل نصاً لتوليد رمز QR</span>
+                  <span role={error ? "alert" : undefined} className="text-xs">
+                    {error || "أدخل نصاً لتوليد رمز QR"}
+                  </span>
                 </div>
               )
             )}
@@ -132,13 +154,14 @@ export function QrGenerator() {
             </Button>
             <Button
               variant="outline"
-              onClick={copyDataUrl}
+              onClick={copyImage}
               disabled={!dataUrl}
               className="gap-2"
               size="sm"
+              aria-label="نسخ صورة رمز QR"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              نسخ
+              {copied ? "تم النسخ" : "نسخ الصورة"}
             </Button>
           </div>
         </CardContent>

@@ -37,6 +37,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
             <button
               key={tool.id}
               onClick={() => onToolChange(tool.id)}
+              aria-pressed={activeTool === tool.id}
               className={`flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 activeTool === tool.id
                   ? "bg-foreground text-background"
@@ -67,7 +68,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
             className="hidden h-9 w-9 sm:inline-flex"
           >
             <a
-              href="https://github.com"
+              href="https://github.com/infinityalgoacademy-lang/AliasLab"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="المصدر"
@@ -79,12 +80,16 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
       </div>
 
       {/* Mobile tool nav */}
-      <div className="border-t border-border/60 md:hidden">
+      <nav
+        className="border-t border-border/60 md:hidden"
+        aria-label="الأدوات على الأجهزة الصغيرة"
+      >
         <div className="custom-scroll flex gap-1 overflow-x-auto px-3 py-2">
           {tools.map((tool) => (
             <button
               key={tool.id}
               onClick={() => onToolChange(tool.id)}
+              aria-pressed={activeTool === tool.id}
               className={`flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 activeTool === tool.id
                   ? "bg-foreground text-background"
@@ -96,7 +101,7 @@ export function SiteHeader({ activeTool, onToolChange, tools }: SiteHeaderProps)
             </button>
           ))}
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

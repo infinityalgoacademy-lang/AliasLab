@@ -109,7 +109,7 @@ export function AliasGenerator() {
   const exportCsv = () => {
     const header = "index,alias,base_email\n";
     const rows = results
-      .map((a, i) => `${i + 1},${a},${baseEmail}`)
+      .map((alias, index) => `${index + 1},${csvCell(alias)},${csvCell(baseEmail)}`)
       .join("\n");
     downloadFile(header + rows, "gmail-aliases.csv", "text/csv");
   };
@@ -124,11 +124,11 @@ export function AliasGenerator() {
   const maxDotVariations = useMemo(() => {
     const at = email.indexOf("@");
     if (at < 0) return 0;
-    const local = email.slice(0, at).replace(/\./g, "");
-    if (local.length <= 1) return local.length;
-    const n = local.length;
-    const exp = Math.min(n - 1, 24);
-    return 1 << exp;
+    const local = email.slice(0, at).split("+", 1)[0].replace(/\./g, "");
+    if (!local) return 0;
+    if (local.length <= 1) return 1;
+    if (local.length > 13) return 5001;
+    return 2 ** (local.length - 1);
   }, [email]);
 
   const isGmail = useMemo(() => {
@@ -154,8 +154,16 @@ export function AliasGenerator() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="text-left font-mono"
+              autoComplete="email"
+              spellCheck={false}
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleGenerate();
+                if (
+                  e.key === "Enter" &&
+                  !e.nativeEvent.isComposing &&
+                  e.keyCode !== 229
+                ) {
+                  handleGenerate();
+                }
               }}
             />
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -307,7 +315,9 @@ export function AliasGenerator() {
               <p className="text-[11px] text-muted-foreground">
                 تنويعات النقاط المتاحة لهذا العنوان:{" "}
                 <span className="font-tabular font-bold text-foreground">
-                  {maxDotVariations.toLocaleString("en")}
+                  {maxDotVariations > 5000
+                    ? ">5,000"
+                    : maxDotVariations.toLocaleString("en")}
                 </span>
               </p>
             )}
@@ -363,6 +373,7 @@ export function AliasGenerator() {
                 size="sm"
                 onClick={selectAll}
                 disabled={results.length === 0}
+                aria-pressed={selected.size === results.length && results.length > 0}
                 className="gap-1.5 text-xs"
               >
                 <Check className="h-3.5 w-3.5" />
@@ -489,14 +500,15 @@ function AliasRow({
             ? "border-foreground bg-foreground text-background"
             : "border-border hover:border-foreground"
         }`}
-        aria-label="تحديد"
+        aria-label={selected ? `إلغاء تحديد ${alias}` : `تحديد ${alias}`}
+        aria-pressed={selected}
       >
         {selected && <Check className="h-3 w-3" />}
       </button>
       <button
         onClick={handleCopy}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
-        aria-label="نسخ"
+        aria-label={`نسخ ${alias}`}
       >
         {copied ? (
           <Check className="h-3.5 w-3.5 text-foreground" />
@@ -529,6 +541,14 @@ function EmptyState() {
   );
 }
 
+function csvCell(value: string) {
+  const firstCharacter = value.trimStart()[0];
+  const safeValue = ["=", "+", "-", "@"].includes(firstCharacter ?? "")
+    ? `'${value}`
+    : value;
+  return `"${safeValue.replaceAll('"', '""')}"`;
+}
+
 function downloadFile(content: string, filename: string, type: string) {
   const blob = new Blob([content], { type: `${type};charset=utf-8` });
   const url = URL.createObjectURL(blob);
@@ -538,5 +558,5 @@ function downloadFile(content: string, filename: string, type: string) {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

@@ -119,7 +119,7 @@ function ToolHeader({ tool }: { tool: string }) {
     },
     validator: {
       title: "فاحص البريد الإلكتروني",
-      desc: "تحقق من صحة البريد واكتشف ألقاب Gmail المخفية بضغطة واحدة.",
+      desc: "تحقق من صيغة البريد واكتشف ألقاب Gmail المخفية بضغطة واحدة.",
       icon: <Mail className="h-5 w-5" />,
     },
     qr: {
@@ -165,7 +165,7 @@ function FeatureStrip({ onToolChange }: { onToolChange: (id: string) => void }) 
       id: "validator",
       icon: <Mail className="h-5 w-5" />,
       title: "فاحص البريد",
-      desc: "تأكد من صحة أي بريد واكتشف إن كان لقباً معاد توجيهه.",
+      desc: "تحقق من صيغة البريد واكتشف إن كان لقباً معاد توجيهه.",
     },
     {
       id: "qr",
