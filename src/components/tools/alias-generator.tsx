@@ -269,7 +269,7 @@ export function AliasGenerator() {
                   إضافة نقاط للألقاب ذات +
                 </Label>
                 <p className="text-[11px] leading-relaxed text-muted-foreground">
-                  يزيد من التشويش ويصعّب التتبّع
+                  يساعدك على تمييز مصدر الرسائل
                 </p>
               </div>
               <Checkbox
@@ -529,8 +529,8 @@ function EmptyState() {
       <div className="space-y-1">
         <p className="text-sm font-bold">لا توجد ألقاب بعد</p>
         <p className="max-w-xs text-xs text-muted-foreground">
-          أدخل بريد Gmail، اختر نوع التوليد والعدد، ثم اضغط على زر التوليد لإنشاء
-          ألقاب لا حصر لها تصل إلى نفس صندوقك.
+          أدخل بريد Gmail واختر نوع التوليد والعدد لإنشاء ألقاب تصل رسائلها إلى
+          صندوقك الأساسي.
         </p>
       </div>
       <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">

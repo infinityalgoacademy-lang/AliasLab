@@ -103,6 +103,44 @@ export function generateDotVariations(localPart: string, limit = 5000): string[]
 /**
  * Generate plus-tag aliases.
  */
+export type GmailPlusAliasResult = { alias: string } | { error: string };
+
+export function createGmailPlusAlias(
+  email: string,
+  label: string,
+): GmailPlusAliasResult {
+  const parsed = parseEmail(email);
+  if (!parsed) {
+    return { error: "أدخل عنوان بريد صحيحًا." };
+  }
+  if (!isGmailDomain(parsed.domain)) {
+    return { error: "هذه الميزة تعمل مع Gmail وGooglemail فقط." };
+  }
+
+  const baseLocal = parsed.localPart.split("+", 1)[0];
+  const tag = label
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 30)
+    .replace(/-+$/g, "");
+
+  if (!baseLocal) {
+    return { error: "أدخل عنوان Gmail الأساسي قبل أي علامة +." };
+  }
+  if (!tag) {
+    return { error: "استخدم تصنيفًا من أحرف إنجليزية أو أرقام، مثل shop." };
+  }
+  if (`${baseLocal}+${tag}`.length > 64) {
+    return { error: "التصنيف طويل جدًا لهذا العنوان؛ استخدم تصنيفًا أقصر." };
+  }
+
+  return { alias: `${baseLocal}+${tag}@${parsed.domain}` };
+}
+
 export function generatePlusAliases(
   localPart: string,
   domain: string,

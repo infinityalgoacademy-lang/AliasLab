@@ -20,9 +20,15 @@ import { PasswordGenerator } from "@/components/tools/password-generator";
 import { UsernameGenerator } from "@/components/tools/username-generator";
 import { EmailValidator } from "@/components/tools/email-validator";
 import { QrGenerator } from "@/components/tools/qr-generator";
+import { GmailPlusAlias } from "@/components/tools/gmail-plus-alias";
 
 const TOOLS = [
   { id: "alias", label: "ألقاب Gmail", icon: <AtSign className="h-4 w-4" /> },
+  {
+    id: "privacy",
+    label: "ألقاب الخصوصية",
+    icon: <ShieldCheck className="h-4 w-4" />,
+  },
   { id: "password", label: "كلمات المرور", icon: <KeyRound className="h-4 w-4" /> },
   { id: "username", label: "أسماء المستخدمين", icon: <User className="h-4 w-4" /> },
   { id: "validator", label: "فاحص البريد", icon: <Mail className="h-4 w-4" /> },
@@ -50,6 +56,7 @@ export default function Home() {
           {active === "username" && <UsernameGenerator />}
           {active === "validator" && <EmailValidator />}
           {active === "qr" && <QrGenerator />}
+          {active === "privacy" && <GmailPlusAlias />}
         </section>
 
         {active === "alias" && <FeatureStrip onToolChange={setActive} />}
@@ -72,22 +79,20 @@ function AliasHero() {
             <span>أداة مجانية — بدون تسجيل — تعمل في متصفحك</span>
           </div>
           <h1 className="text-balance text-3xl font-extrabold tracking-tight sm:text-5xl">
-            ولّد ألقاب{" "}
+            نظّم بريدك بألقاب{" "}
             <span className="relative whitespace-nowrap">
               <span className="relative z-10">Gmail</span>
               <span className="absolute inset-x-0 bottom-1 -z-0 h-3 bg-foreground/10" />
-            </span>{" "}
-            بكميات لا حصر لها
+            </span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
-            استغل ميزة Gmail التي تتجاهل النقاط وعلامة + لتوليد آلاف الألقاب التي
-            تصلك جميعاً في صندوق واحد. استخدمها لتسجيل حسابات متعددة، تتبّع مصادر
-            الرسائل، وحماية بريدك الأساسي من السبام.
+            استخدم النقاط وعلامة + لتنظيم الرسائل الواردة إلى صندوق Gmail واحد،
+            وربط الألقاب بمصادرها. هذه ألقاب تصل إلى صندوقك نفسه وليست صناديق مستقلة.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
             <Stat icon={<Zap className="h-3.5 w-3.5" />} text="توليد فوري" />
-            <Stat icon={<ShieldCheck className="h-3.5 w-3.5" />} text="خصوصية كاملة" />
-            <Stat icon={<Star className="h-3.5 w-3.5" />} text="حتى 5000 لقب دفعة واحدة" />
+            <Stat icon={<ShieldCheck className="h-3.5 w-3.5" />} text="لا يُحفظ العنوان" />
+            <Stat icon={<Star className="h-3.5 w-3.5" />} text="رسائل في صندوقك" />
             <Stat icon={<Github className="h-3.5 w-3.5" />} text="تصدير TXT/CSV" />
           </div>
         </div>
@@ -114,7 +119,7 @@ function ToolHeader({ tool }: { tool: string }) {
     },
     username: {
       title: "مولّد أسماء المستخدمين",
-      desc: "أنشئ أسماء مستخدمين فريدة وقابلة للتذكّر لأنشطتك المتعددة.",
+      desc: "أنشئ أسماء مستخدمين واضحة لاستخداماتك وملفاتك الشخصية.",
       icon: <User className="h-5 w-5" />,
     },
     validator: {
@@ -126,6 +131,11 @@ function ToolHeader({ tool }: { tool: string }) {
       title: "مولّد رمز QR",
       desc: "حوّل أي بريد أو نص أو رابط إلى رمز QR قابل للمسح والتحميل.",
       icon: <QrCode className="h-5 w-5" />,
+    },
+    privacy: {
+      title: "ألقاب Gmail للخصوصية",
+      desc: "أنشئ عنوانًا بعلامة + لتصل الرسائل إلى بريدك الأصلي وتُصنّف بسهولة.",
+      icon: <ShieldCheck className="h-5 w-5" />,
     },
   };
   const i = info[tool];
@@ -153,19 +163,19 @@ function FeatureStrip({ onToolChange }: { onToolChange: (id: string) => void }) 
       id: "password",
       icon: <KeyRound className="h-5 w-5" />,
       title: "كلمات مرور قوية",
-      desc: "ولّد كلمات مرور آمنة لكل حساب جديد تنشئه بلقب مختلف.",
+      desc: "أنشئ كلمات مرور قوية لحساباتك الشخصية.",
     },
     {
       id: "username",
       icon: <User className="h-5 w-5" />,
       title: "أسماء مستخدمين",
-      desc: "أسماء فريدة لإكمال ملفك عند التسجيل في المواقع والخدمات.",
+      desc: "أسماء واضحة لاستخداماتك وملفاتك الشخصية.",
     },
     {
       id: "validator",
       icon: <Mail className="h-5 w-5" />,
       title: "فاحص البريد",
-      desc: "تحقق من صيغة البريد واكتشف إن كان لقباً معاد توجيهه.",
+      desc: "تحقق من صيغة البريد الإلكتروني واكتشف نطاقه.",
     },
     {
       id: "qr",
@@ -183,7 +193,7 @@ function FeatureStrip({ onToolChange }: { onToolChange: (id: string) => void }) 
               أدوات بريدية متكاملة
             </h2>
             <p className="text-sm text-muted-foreground">
-              كل ما تحتاجه لإدارة حساباتك المتعددة في مكان واحد.
+              أدوات تساعدك على تنظيم بريدك وحماية خصوصيتك.
             </p>
           </div>
         </div>
