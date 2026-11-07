@@ -33,6 +33,9 @@ export function EmailValidator() {
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
       <Card className="border-border/80">
         <CardContent className="space-y-5 p-6">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            يفحص هذا الفاحص صيغة العنوان فقط؛ لا يتحقق من وجود صندوق البريد أو إمكانية استقباله.
+          </p>
           <div className="space-y-2">
             <Label htmlFor="val-email" className="flex items-center gap-2 text-sm font-bold">
               <Mail className="h-4 w-4" />
@@ -86,7 +89,7 @@ export function EmailValidator() {
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-bold">
-                    {result.valid ? "بريد صالح" : "بريد غير صالح"}
+                    {result.valid ? "صيغة البريد صحيحة" : "صيغة البريد غير صالحة"}
                   </p>
                   <p dir="ltr" className="truncate text-xs text-muted-foreground">
                     {result.email}
@@ -185,8 +188,8 @@ export function EmailValidator() {
           </div>
           <div className="space-y-3 text-xs leading-relaxed text-muted-foreground">
             <p>
-              يفحص هذا التحليل صيغة البريد ويتحقق من القواعد المعروفة لـ Gmail
-              التي تتيح لك إنشاء ألقاب لا حصر لها:
+              يفحص هذا التحليل صيغة البريد ويشرح قواعد Gmail المعروفة لإنشاء
+              الألقاب، لكنه لا يتحقق من وجود صندوق البريد:
             </p>
             <div className="space-y-2.5">
               <div className="rounded-md border border-border bg-background p-2.5">

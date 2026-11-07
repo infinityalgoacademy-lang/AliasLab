@@ -34,6 +34,12 @@ export function PasswordGenerator() {
   };
 
   const strength = passwordStrength(password);
+  const selectedCharacterSetCount = [
+    opts.lowercase,
+    opts.uppercase,
+    opts.digits,
+    opts.symbols,
+  ].filter(Boolean).length;
 
   const handleCopy = async () => {
     try {
@@ -62,10 +68,13 @@ export function PasswordGenerator() {
       <Card className="border-border/80">
         <CardContent className="space-y-6 p-6">
           <div className="space-y-3">
-            <Label className="text-sm font-bold">كلمة المرور المولّدة</Label>
-            <div className="relative">
+            <Label htmlFor="generated-password" className="text-sm font-bold">
+              كلمة المرور المولّدة
+            </Label>
+            <div className="relative" dir="ltr">
               <Input
-                dir="rtl"
+                id="generated-password"
+                dir="ltr"
                 readOnly
                 value={password}
                 className="h-14 bg-muted/40 pe-12 font-mono text-lg tracking-wide"
@@ -73,7 +82,8 @@ export function PasswordGenerator() {
               <button
                 onClick={handleCopy}
                 className="absolute end-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
-                aria-label="نسخ"
+                aria-label="نسخ كلمة المرور"
+                disabled={!password}
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </button>
@@ -86,7 +96,15 @@ export function PasswordGenerator() {
               <span className="font-bold">قوة كلمة المرور</span>
               <span className="font-medium">{strength.label}</span>
             </div>
-            <div className="flex gap-1">
+            <div
+              className="flex gap-1"
+              role="progressbar"
+              aria-label="قوة كلمة المرور"
+              aria-valuemin={0}
+              aria-valuemax={4}
+              aria-valuenow={strength.score}
+              aria-valuetext={strength.label}
+            >
               {strengthBars.map((i) => (
                 <div
                   key={i}
@@ -99,7 +117,7 @@ export function PasswordGenerator() {
               ))}
             </div>
             <p className="text-[11px] text-muted-foreground">
-              الإنتروبيا:{" "}
+              تقدير الإنتروبيا:{" "}
               <span className="font-tabular font-bold">{strength.entropy}</span> بت
               {strength.entropy >= 70
                 ? " — يقاوم هجمات القوة الغاشمة"
@@ -179,26 +197,35 @@ export function PasswordGenerator() {
 
           <div className="space-y-2.5">
             <ToggleRow
+              id="include-lowercase"
               label="أحرف صغيرة (a-z)"
               checked={opts.lowercase}
+              disabled={opts.lowercase && selectedCharacterSetCount === 1}
               onChange={(v) => toggle("lowercase")(v)}
             />
             <ToggleRow
+              id="include-uppercase"
               label="أحرف كبيرة (A-Z)"
               checked={opts.uppercase}
+              disabled={opts.uppercase && selectedCharacterSetCount === 1}
               onChange={(v) => toggle("uppercase")(v)}
             />
             <ToggleRow
+              id="include-digits"
               label="أرقام (0-9)"
               checked={opts.digits}
+              disabled={opts.digits && selectedCharacterSetCount === 1}
               onChange={(v) => toggle("digits")(v)}
             />
             <ToggleRow
+              id="include-symbols"
               label="رموز (!@#$%)"
               checked={opts.symbols}
+              disabled={opts.symbols && selectedCharacterSetCount === 1}
               onChange={(v) => toggle("symbols")(v)}
             />
             <ToggleRow
+              id="exclude-ambiguous"
               label="استبعاد الملتبسة (0,O,l,1)"
               checked={opts.excludeAmbiguous}
               onChange={(v) => toggle("excludeAmbiguous")(v)}
@@ -217,18 +244,29 @@ export function PasswordGenerator() {
 }
 
 function ToggleRow({
+  id,
   label,
   checked,
+  disabled = false,
   onChange,
 }: {
+  id: string;
   label: string;
   checked: boolean;
-  onChange: (v: boolean) => void;
+  disabled?: boolean;
+  onChange: (value: boolean) => void;
 }) {
   return (
     <div className="flex items-center justify-between">
-      <Label className="text-xs">{label}</Label>
-      <Checkbox checked={checked} onCheckedChange={(v) => onChange(v === true)} />
+      <Label htmlFor={id} className="text-xs">
+        {label}
+      </Label>
+      <Checkbox
+        id={id}
+        checked={checked}
+        disabled={disabled}
+        onCheckedChange={(value) => onChange(value === true)}
+      />
     </div>
   );
 }

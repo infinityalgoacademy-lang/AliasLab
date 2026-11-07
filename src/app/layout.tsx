@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,26 +12,35 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "AliasLab — مولّد ألقاب الجيميل وأدوات البريد",
+  title: "AliasLab — ألقاب Gmail وأدوات البريد",
   description:
-    "منصة متكاملة لتوليد ألقاب (Aliases) لبريد Gmail بكميات كبيرة باستخدام خدعة النقطة وعلامة +، بالإضافة إلى أدوات لتوليد كلمات المرور وأسماء المستخدمين والتحقق من البريد وإنشاء رموز QR.",
+    "أدوات بريدية لإنشاء ألقاب Gmail لتنظيم الرسائل وحماية الخصوصية، مع أدوات للتحقق من البريد وكلمات المرور وأسماء المستخدمين وإنشاء رموز QR.",
   keywords: [
     "Gmail alias",
+    "Gmail plus alias",
+    "ألقاب Gmail للخصوصية",
     "مولد ألقاب الجيميل",
-    "Gmail dot trick",
     "مولد كلمات المرور",
     "أدوات البريد",
   ],
   authors: [{ name: "AliasLab" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
   },
   openGraph: {
-    title: "AliasLab — مولّد ألقاب الجيميل",
-    description: "ولّد ألقاب Gmail بكميات كبيرة مع أدوات بريدية متكاملة",
+    title: "AliasLab — ألقاب Gmail وأدوات البريد",
+    description: "أدوات Gmail لتنظيم الرسائل وحماية خصوصية بريدك الأساسي.",
     siteName: "AliasLab",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
 };
 
 export default function RootLayout({
